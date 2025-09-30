@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JB Bank – Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;background:linear-gradient(135deg,#f0f5ff 0%,#e6f0ff 100%);min-height:100vh}
+        header{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(0,0,0,.08);z-index:1000}
+        .head{display:flex;align-items:center;justify-content:space-between;padding:1rem 5%;max-width:1400px;margin:auto}
+        .logo{font-size:1.6rem;font-weight:700;color:#1a237e}
+        .user{display:flex;align-items:center;gap:.75rem}
+        .avatar{width:36px;height:36px;background:linear-gradient(135deg,#1a237e 0%,#283593 100%);color:#fff;border-radius:50%;display:grid;place-content:center;font-weight:700}
+        .logout{background:#ef4444;color:#fff;border:none;padding:.4rem .9rem;border-radius:20px;cursor:pointer;font-size:.8rem;transition:all .3s}
+        .logout:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(220,38,38,.3)}
+        main{padding:5rem 5% 2rem;max-width:1400px;margin:auto}
+        .tabs{display:flex;gap:1rem;margin-bottom:1.5rem}
+        .tab{padding:.75rem 1.25rem;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.05);border-radius:10px;cursor:pointer;transition:all .3s;font-weight:500}
+        .tab.active{background:linear-gradient(135deg,#1a237e 0%,#283593 100%);color:#fff;box-shadow:0 4px 15px rgba(26,35,126,.3)}
+        .pane{display:none}.pane.active{display:block}
+        .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-bottom:2rem}
+        .card{background:rgba(255,255,255,.9);backdrop-filter:blur(5px);border-radius:20px;padding:2rem;box-shadow:0 8px 32px rgba(31,38,135,.1);border:1px solid rgba(255,255,255,.5);transition:all .3s}
+        .card:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(31,38,135,.15)}
+        .checking{border-left:4px solid #1a237e}.savings{border-left:4px solid #10b981}
+        .type{font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;color:#666;margin-bottom:.25rem}
+        .bal{font-size:2.4rem;font-weight:700;color:#1a237e}.savings .bal{color:#10b981}
+        .num{color:#666;font-size:.85rem;margin-bottom:1.2rem}
+        .acts{display:flex;gap:.75rem}.acts button{flex:1;padding:.6rem;border:1px solid rgba(0,0,0,.1);background:rgba(255,255,255,.7);border-radius:8px;cursor:pointer;transition:all .3s;font-weight:500}
+        .acts button:hover{background:rgba(26,35,126,.1);border-color:rgba(26,35,126,.3)}
+        .tx-sect{background:rgba(255,255,255,.75);backdrop-filter:blur(10px);border-radius:20px;padding:1.5rem 2rem;box-shadow:0 8px 32px rgba(31,38,135,.1);border:1px solid rgba(255,255,255,.5);margin-bottom:2rem}
+        .tx-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}h2{font-size:1.25rem;color:#1a237e}
+        .tx-list{display:flex;flex-direction:column;gap:.75rem}
+        .tx-row{display:flex;justify-content:space-between;align-items:center;padding:1rem;background:rgba(255,255,255,.9);border-radius:12px;transition:all .3s;box-shadow:0 2px 8px rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.05)}
+        .tx-row:hover{transform:translateX(4px);box-shadow:0 5px 15px rgba(0,0,0,.06)}
+        .ico{width:38px;height:38px;background:rgba(26,35,126,.08);border-radius:50%;display:grid;place-content:center;font-size:1.2rem;color:#1a237e}
+        .det h4{color:#333;margin-bottom:.15rem}.det p{color:#666;font-size:.8rem}
+        .amt{font-weight:600;font-size:1rem}.pos{color:#10b981}.neg{color:#ef4444}
+        .date-time{color:#666;font-size:.85rem}
+    </style>
+</head>
+<body>
+<header>
+    <div class="head">
+        <div class="logo">JB Bank</div>
+        <div class="user">
+            <div class="avatar">TL</div><span>Till Lindemann</span>
+            <button class="logout" onclick="logout()">Logout</button>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('checking')">💳 Checking</div>
+        <div class="tab" onclick="switchTab('savings')">🏦 Savings</div>
+        <div class="tab" onclick="switchTab('total')">📊 Total</div>
+    </div>
+
+    <!-- CHECKING -->
+    <div id="checking" class="pane active">
+        <div class="cards">
+            <div class="card checking">
+                <div class="type">Available Balance</div>
+                <div class="bal">$45,250.00</div>
+                <div class="num">****1234</div>
+                <div class="acts">
+                    <button onclick="alert('Transfer')">Transfer</button>
+                    <button onclick="alert('Deposit')">Deposit</button>
+                    <button onclick="alert('Statements')">Statements</button>
+                </div>
+            </div>
+        </div>
+        <div class="tx-sect">
+            <div class="tx-hdr"><h2>Recent Checking Transactions</h2><span class="date-time"></span></div>
+            <div class="tx-list">
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">🛒</span><div class="det"><h4>Grocery Store</h4><p>Today, 14:30</p></div></div><span class="amt neg">-$125.43</span></div>
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">💰</span><div class="det"><h4>Salary Deposit</h4><p>Dec 30</p></div></div><span class="amt pos">+$3,500.00</span></div>
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">⛽</span><div class="det"><h4>Gas Station</h4><p>Dec 29</p></div></div><span class="amt neg">-$65.00</span></div>
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">🍽️</span><div class="det"><h4>Restaurant</h4><p>Dec 28</p></div></div><span class="amt neg">-$89.50</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAVINGS -->
+    <div id="savings" class="pane">
+        <div class="cards">
+            <div class="card savings">
+                <div class="type">Available Balance</div>
+                <div class="bal">$199,754,750.00</div>
+                <div class="num">****5678</div>
+                <div style="margin-top:1rem;padding:1rem;background:rgba(16,185,129,.08);border-radius:10px"><div style="font-size:.8rem;color:#10b981">Annual Interest Rate</div><div style="font-size:1.5rem;font-weight:700;color:#10b981">4.25% APY</div></div>
+                <div class="acts">
+                    <button onclick="alert('Transfer')">Transfer</button>
+                    <button onclick="alert('Goals')">Goals</button>
+                    <button onclick="alert('Statements')">Statements</button>
+                </div>
+            </div>
+        </div>
+        <div class="tx-sect">
+            <div class="tx-hdr"><h2>Recent Savings Transactions</h2><span class="date-time"></span></div>
+            <div class="tx-list">
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">📈</span><div class="det"><h4>Monthly Interest</h4><p>Dec 31</p></div></div><span class="amt pos">+$685,421.50</span></div>
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">💸</span><div class="det"><h4>Transfer from Checking</h4><p>Dec 30</p></div></div><span class="amt pos">+$2,500.00</span></div>
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">🏢</span><div class="det"><h4>Investment Return</h4><p>Dec 28</p></div></div><span class="amt pos">+$1.25M</span></div>
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">💰</span><div class="det"><h4>Business Revenue</h4><p>Dec 25</p></div></div><span class="amt pos">+$850K</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOTAL -->
+    <div id="total" class="pane">
+        <div class="cards">
+            <div class="card checking"><div class="type">Checking</div><div class="bal">$45,250.00</div><div class="num">****1234</div></div>
+            <div class="card savings"><div class="type">Savings</div><div class="bal">$199,754,750.00</div><div class="num">****5678</div></div>
+            <div class="card" style="border-left-color:#fbbf24"><div class="type">Total Portfolio</div><div class="bal">$199,800,000.00</div><div class="num">Combined balance</div></div>
+        </div>
+        <div class="tx-sect">
+            <div class="tx-hdr"><h2>Combined History</h2><span class="date-time"></span></div>
+            <div class="tx-list">
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">🏢</span><div class="det"><h4>Investment Dividend</h4><p>Today, 14:30 • Savings</p></div></div><span class="amt pos">+$45K</span></div>
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">🛒</span><div class="det"><h4>Grocery Store</h4><p>Today, 14:30 • Checking</p></div></div><span class="amt neg">-$125.43</span></div>
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">💰</span><div class="det"><h4>Salary Deposit</h4><p>Dec 30 • Checking</p></div></div><span class="amt pos">+$3,500</span></div>
+                <div class="tx-row"><div style="display:flex;gap:.8rem;align-items:center"><span class="ico">📈</span><div class="det"><h4>Monthly Interest</h4><p>Dec 31 • Savings</p></div></div><span class="amt pos">+$685K</span></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    function updateClock(){
+        const now=new Date(),opts={weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'};
+        document.querySelectorAll('.date-time').forEach(el=>el.textContent=now.toLocaleDateString('en-US',opts));
+    }
+    updateClock(); setInterval(updateClock,60000);
+    function switchTab(tab){
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+        document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+        document.getElementById(tab).classList.add('active');
+    }
+    function logout(){if(confirm('Logout?'))location.href='login.html';}
+</script>
+</body>
+</html>
